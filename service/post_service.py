@@ -15,9 +15,9 @@ class PostService(object):
 
     @staticmethod
     def get_post_by_id(post_id):
-        post = Post.query(Post.id == post_id)
+        post = Post.query.filter(Post.id == post_id).first()
         if post is None:
-            raise ServiceException(ErrorCode.NOT_FOUND, 'Post id = %s not found', post_id)
+            raise ServiceException(ErrorCode.NOT_FOUND, 'Post id = %s not found' % post_id)
 
     @staticmethod
     def count_posts_by_category_id(category_id):
@@ -33,6 +33,8 @@ class PostService(object):
 
     @staticmethod
     def insert_post(post):
+        length = len(post.content)
+        post.sub_content = post.content[0:min(200, length)] + '...'
         db.session.add(post)
         db.session.commit()
 

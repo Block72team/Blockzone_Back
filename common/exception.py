@@ -27,7 +27,7 @@ class ServiceException(Exception):
         self.detail = detail
 
     def get_log_msg(self):
-        return 'Error Code：' + str(self.error_code) + '; Message：' + self.msg + '; Detail：' + self.detail
+        return 'Error Code: ' + str(self.error_code) + '; Message: ' + self.msg + '; Detail:' + self.detail
 
 
 # Exception catcher
