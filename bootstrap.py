@@ -8,9 +8,11 @@ from tornado.ioloop import IOLoop
 if __name__ == '__main__':
     # The init place of controllers
     from controller import post_controller
-
+    from controller import auth_controller
+    from controller import view
     # The place to register blue print
     app.register_blueprint(post_controller.posts_bp, url_prefix='/api/v1/posts')
+    app.register_blueprint(auth_controller.auth_bp, url_prefix='/api/v1/auth')
 
     http_server = HTTPServer(WSGIContainer(app))
     http_server.listen(app.config['HTTP_PORT'])

@@ -14,6 +14,7 @@ __author__ = 'Jiateng Liang'
 class ErrorCode(object):
     FAIL = -1
     SUCCESS = 1
+    AUTH_FAIL = 2
     PARAM_ERROR = 3
     NOT_FOUND = 4
     INTERNAL_ERROR = 5

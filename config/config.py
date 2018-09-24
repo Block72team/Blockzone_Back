@@ -34,5 +34,10 @@ class Config(object):
     PAGE_MEDIUM = 25
     PAGE_LARGE = 50
 
+    # Email
+    EMAIL_USERNAME = '602689817@qq.com'
+    EMAIL_PASSWORD = 'dieiogykoalubebj'
+    EMAIL_SERVER = 'smtp.qq.com'
+    EMAIL_PORT = 25
 
 
