@@ -54,3 +54,5 @@ class Config(object):
     SECRET_KEY = 'GL-u6pTNIt73xufAMK7OmdqddRuRZcNv7KF0Xexj'
     BUCKET_NAME = 'blockzone-test'
     FILE_SERVER_HOST = 'http://pfq9cil3s.bkt.gdipper.com'
+    ICON_STYLE = 'imageView2/2/w/200/h/200/q/75|imageslim'
+    THUMB_STYLE = 'imageView2/0/q/75|imageslim'
