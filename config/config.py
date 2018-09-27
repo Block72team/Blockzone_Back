@@ -40,4 +40,17 @@ class Config(object):
     EMAIL_SERVER = 'smtp.qq.com'
     EMAIL_PORT = 25
 
+    # Content
+    SUB_CONTENT_LENGTH = 200
 
+    # Allow cross region
+    ALLOW_CROSS = True
+
+    # Qiniu cloud storage
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024  # 2MB
+    UPLOAD_FOLDER = '/Users/liangjiateng/Desktop'
+    ACCESS_KEY = 'p7mTlC_hlg2NsASDs9D_T7rdUeOzuFAFvfTC7GV7'
+    SECRET_KEY = 'GL-u6pTNIt73xufAMK7OmdqddRuRZcNv7KF0Xexj'
+    BUCKET_NAME = 'blockzone-test'
+    FILE_SERVER_HOST = 'http://pfq9cil3s.bkt.gdipper.com'

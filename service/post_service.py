@@ -2,6 +2,8 @@
 'some comment...'
 from datetime import datetime
 
+from common.model_util import models2dict
+
 __author__ = 'Jiateng Liang'
 from bootstrap_init import db
 from model.post import Post
@@ -18,6 +20,10 @@ class PostService(object):
         post = Post.query.filter(Post.id == post_id).first()
         if post is None:
             raise ServiceException(ErrorCode.NOT_FOUND, 'Post id = %s not found' % post_id)
+
+    @staticmethod
+    def count_posts():
+        return Post.query.filter_by().count()
 
     @staticmethod
     def count_posts_by_category_id(category_id):
@@ -53,6 +59,15 @@ class PostService(object):
         post.update_time = datetime.now()
         db.session.add(post)
         db.session.commit()
+
+    @staticmethod
+    def list_recent_posts_by_page(page, page_size):
+        cnt = PostService.count_posts()
+        page_util = PageUtil(page, page_size, cnt)
+        posts = Post.query.order_by(Post.create_time.desc()).slice(page_util.get_start(),
+                                                                   page_util.get_end()).all()
+        page_util.data = models2dict(posts)
+        return page_util
 
     @staticmethod
     def list_posts_by_page_order_by_time_filter_by_category_id(page, page_size, category_id, order=DESC):

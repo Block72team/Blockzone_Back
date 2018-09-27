@@ -2,10 +2,9 @@
 'some comment...'
 import json
 
-from flask import Blueprint, request, redirect, make_response, jsonify
+from flask import Blueprint, request, make_response, jsonify
 from concurrent.futures import ThreadPoolExecutor
 from common.exception import api, ServiceException, ErrorCode
-from common.form_util import validate_form
 from common.model_util import json_resp
 from service.auth_service import AuthService
 from common.token_util import *

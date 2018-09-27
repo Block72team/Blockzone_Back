@@ -1,7 +1,8 @@
 # coding=utf-8
 'Init the app'
 __author__ = 'Jiateng Liang'
-from flask import Flask, Blueprint
+from flask import Flask
+
 from config.config import *
 from flask_sqlalchemy import SQLAlchemy
 import sys
@@ -14,5 +15,6 @@ if len(sys.argv) <= 1 or sys.argv[1] == 'dev':
 
 # Database init
 db = SQLAlchemy(app)
+
 
 

@@ -3,7 +3,7 @@
 import datetime
 
 __author__ = 'Jiateng Liang'
-from sqlalchemy import Column, BigInteger, String, Text, DateTime
+from sqlalchemy import Column, BigInteger, String, Text, DateTime, Boolean
 from bootstrap_init import db
 
 
@@ -19,6 +19,6 @@ class Post(db.Model):
     content = Column(Text, nullable=False)
     author = Column(String(50), nullable=False)
     region = Column(String(50), nullable=True)
-    sub_content = Column(Text, nullable=False)
+    is_ad = Column(Boolean, nullable=False, default=False)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     update_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
