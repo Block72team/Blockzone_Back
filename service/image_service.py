@@ -30,3 +30,4 @@ class ImageService(object):
         image.url = host + '/' + key
         db.session.add(image)
         db.session.commit()
+        return image

@@ -3,7 +3,7 @@
 from flask import Blueprint, request, jsonify
 from bootstrap_init import app
 from common.exception import ServiceException, ErrorCode, api
-from common.model_util import json_resp
+from common.model_util import json_resp, model2dict
 from service.image_service import ImageService
 
 __author__ = 'Jiateng Liang'
@@ -20,8 +20,8 @@ def image_upload():
 
     file = request.files['image']
     if file and allowed_file(file.filename):
-        ImageService.upload_image(file)
+        image = ImageService.upload_image(file)
     else:
         raise ServiceException(ErrorCode.PARAM_ERROR, 'file format error')
 
-    return jsonify(json_resp())
+    return jsonify(json_resp(data=model2dict(image)))

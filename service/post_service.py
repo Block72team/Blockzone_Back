@@ -26,6 +26,10 @@ class PostService(object):
         return Post.query.filter_by().count()
 
     @staticmethod
+    def count_drafts():
+        return Post.query.filter(Post.status == Post.Status.DRAFT.value).count()
+
+    @staticmethod
     def count_posts_by_category_id(category_id):
         return Post.query.filter_by(Post.category_id == category_id).count()
 
@@ -39,104 +43,106 @@ class PostService(object):
 
     @staticmethod
     def insert_post(post):
-        length = len(post.content)
-        post.sub_content = post.content[0:min(200, length)] + '...'
         db.session.add(post)
-        db.session.commit()
-
-    @staticmethod
-    def add_likes(post_id, cnt):
-        post = PostService.get_post_by_id(post_id)
-        post.likes += cnt
+        post.create_time = datetime.now()
         post.update_time = datetime.now()
-        db.session.add(post)
         db.session.commit()
+        return post
 
-    @staticmethod
-    def add_pv(post_id, cnt):
-        post = PostService.get_post_by_id(post_id)
-        post.pv += cnt
-        post.update_time = datetime.now()
-        db.session.add(post)
-        db.session.commit()
 
-    @staticmethod
-    def list_recent_posts_by_page(page, page_size):
-        cnt = PostService.count_posts()
-        page_util = PageUtil(page, page_size, cnt)
-        posts = Post.query.order_by(Post.create_time.desc()).slice(page_util.get_start(),
-                                                                   page_util.get_end()).all()
-        page_util.data = models2dict(posts)
-        return page_util
-
-    @staticmethod
-    def list_posts_by_page_order_by_time_filter_by_category_id(page, page_size, category_id, order=DESC):
-        cnt = PostService.count_posts_by_category_id(category_id)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
-                                                                         page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
-                                                                        page_util.get_end()).all()
-        return posts
-
-    @staticmethod
-    def list_posts_by_page_order_by_pv_filter_by_category_id(page, page_size, category_id, order=DESC):
-        cnt = PostService.count_posts_by_category_id(category_id)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
-                                                                page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
-                                                               page_util.get_end()).all()
-        return posts
-
-    @staticmethod
-    def list_posts_by_page_order_by_time_filter_by_tag_id(page, page_size, tag_id, order=DESC):
-        cnt = PostService.count_posts_by_tag_id(tag_id)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
-                                                                         page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
-                                                                        page_util.get_end()).all()
-        return posts
-
-    @staticmethod
-    def list_posts_by_page_order_by_pv_filter_by_tag_id(page, page_size, tag_id, order=DESC):
-        cnt = PostService.count_posts_by_tag_id(tag_id)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
-                                                                page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
-                                                               page_util.get_end()).all()
-        return posts
-
-    @staticmethod
-    def list_posts_by_page_order_by_time_filter_by_region(page, page_size, region, order=DESC):
-        cnt = PostService.count_posts_by_region(region)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
-                                                                         page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
-                                                                        page_util.get_end()).all()
-        return posts
-
-    @staticmethod
-    def list_posts_by_page_order_by_pv_filter_by_region(page, page_size, region, order=DESC):
-        cnt = PostService.count_posts_by_region(region)
-        page_util = PageUtil(page, page_size, cnt)
-        if order == PostService.DESC:
-            posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
-                                                                page_util.get_end()).all()
-        else:
-            posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
-                                                               page_util.get_end()).all()
-        return posts
+        # @staticmethod
+        # def add_likes(post_id, cnt):
+        #     post = PostService.get_post_by_id(post_id)
+        #     post.likes += cnt
+        #     post.update_time = datetime.now()
+        #     db.session.add(post)
+        #     db.session.commit()
+        #
+        # @staticmethod
+        # def add_pv(post_id, cnt):
+        #     post = PostService.get_post_by_id(post_id)
+        #     post.pv += cnt
+        #     post.update_time = datetime.now()
+        #     db.session.add(post)
+        #     db.session.commit()
+        #
+        # @staticmethod
+        # def list_recent_posts_by_page(page, page_size):
+        #     cnt = PostService.count_posts()
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     posts = Post.query.order_by(Post.create_time.desc()).slice(page_util.get_start(),
+        #                                                                page_util.get_end()).all()
+        #     page_util.data = models2dict(posts)
+        #     return page_util
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_time_filter_by_category_id(page, page_size, category_id, order=DESC):
+        #     cnt = PostService.count_posts_by_category_id(category_id)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
+        #                                                                      page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
+        #                                                                     page_util.get_end()).all()
+        #     return posts
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_pv_filter_by_category_id(page, page_size, category_id, order=DESC):
+        #     cnt = PostService.count_posts_by_category_id(category_id)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
+        #                                                             page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
+        #                                                            page_util.get_end()).all()
+        #     return posts
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_time_filter_by_tag_id(page, page_size, tag_id, order=DESC):
+        #     cnt = PostService.count_posts_by_tag_id(tag_id)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
+        #                                                                      page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
+        #                                                                     page_util.get_end()).all()
+        #     return posts
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_pv_filter_by_tag_id(page, page_size, tag_id, order=DESC):
+        #     cnt = PostService.count_posts_by_tag_id(tag_id)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
+        #                                                             page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
+        #                                                            page_util.get_end()).all()
+        #     return posts
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_time_filter_by_region(page, page_size, region, order=DESC):
+        #     cnt = PostService.count_posts_by_region(region)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.create_time.desc()).slice(page_util.get_start(),
+        #                                                                      page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.create_time.asc()).slice(page_util.get_start(),
+        #                                                                     page_util.get_end()).all()
+        #     return posts
+        #
+        # @staticmethod
+        # def list_posts_by_page_order_by_pv_filter_by_region(page, page_size, region, order=DESC):
+        #     cnt = PostService.count_posts_by_region(region)
+        #     page_util = PageUtil(page, page_size, cnt)
+        #     if order == PostService.DESC:
+        #         posts = Post.query().order_by(Post.pv.desc()).slice(page_util.get_start(),
+        #                                                             page_util.get_end()).all()
+        #     else:
+        #         posts = Post.query().order_by(Post.pv.asc()).slice(page_util.get_start(),
+        #                                                            page_util.get_end()).all()
+        #     return posts
