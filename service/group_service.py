@@ -13,12 +13,22 @@ class GroupService(object):
         category = Category.query.filter(Category.id == id).first()
         if category is None:
             raise ServiceException(ErrorCode.NOT_FOUND, 'category id = %s not found' % id)
+        return category
 
     @staticmethod
     def get_tag_by_id(id):
-        category = Tag.query.filter(Tag.id == id).first()
-        if category is None:
+        tag = Tag.query.filter(Tag.id == id).first()
+        if tag is None:
             raise ServiceException(ErrorCode.NOT_FOUND, 'tag id = %s not found' % id)
+        return tag
+
+    @staticmethod
+    def get_tag_by_name(name):
+        tag = Tag.query.filter(Tag.name == name).first()
+        if tag is None:
+            raise ServiceException(ErrorCode.NOT_FOUND, 'tag name = %s not found' % name)
+        return tag
+
 
     @staticmethod
     def list_categories():
@@ -36,3 +46,4 @@ class GroupService(object):
         tag.name = name
         db.session.add(tag)
         db.session.commit()
+        return tag
