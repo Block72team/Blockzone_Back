@@ -3,6 +3,7 @@
 import hashlib
 
 from bootstrap_init import app, db
+from common.exception import ServiceException, ErrorCode
 from model.image import Image
 
 __author__ = 'Jiateng Liang'
@@ -30,4 +31,11 @@ class ImageService(object):
         image.url = host + '/' + key
         db.session.add(image)
         db.session.commit()
+        return image
+
+    @staticmethod
+    def get_image_by_id(id):
+        image = Image.query.filter(Image.id == id).first()
+        if image is None:
+            raise ServiceException(ErrorCode.NOT_FOUND, 'image id = %s not found' % id)
         return image

@@ -58,10 +58,19 @@ class PostService(object):
         return Post.query.filter(Post.status == Post.Status.DRAFT.value).order_by(Post.create_time.desc()).all()
 
     @staticmethod
+    def list_posts_by_title(title):
+        return Post.query.filter(Post.status == Post.Status.ONLINE.value, Post.title.like('%' + title + '%')).order_by(
+            Post.create_time.desc()).all()
+
+    @staticmethod
+    def list_drafts_by_title(title):
+        return Post.query.filter(Post.status == Post.Status.DRAFT.value, Post.title.like('%' + title + '%')).order_by(
+            Post.create_time.desc()).all()
+
+    @staticmethod
     def change_post_status(id, status):
         post = PostService.get_post_by_id(id)
         post.status = status
         db.session.add(post)
         db.session.commit()
         return post
-
